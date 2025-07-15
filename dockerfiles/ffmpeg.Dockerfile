@@ -1,4 +1,4 @@
-FROM jrottenberg/ffmpeg:4.4-ubuntu
+FROM jrottenberg/ffmpeg:4.4-alpine
 
 WORKDIR /data
 

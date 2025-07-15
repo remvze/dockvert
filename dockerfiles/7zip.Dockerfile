@@ -1,6 +1,6 @@
-FROM ubuntu:22.04
+FROM alpine:latest
 
-RUN apt-get update && apt-get install -y p7zip-full
+RUN apk add --no-cache p7zip
 
 WORKDIR /data
 

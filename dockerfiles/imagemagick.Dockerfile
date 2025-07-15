@@ -1,6 +1,6 @@
-FROM ubuntu:22.04
+FROM alpine:latest
 
-RUN apt-get update && apt-get install -y imagemagick
+RUN apk add --no-cache imagemagick
 
 WORKDIR /data
 
