@@ -43,6 +43,21 @@ detect_type() {
 }
 
 # -------------------------------
+# Generate Output Filename
+# -------------------------------
+generate_output_filename() {
+  local input="$1"
+  local out_format="$2"
+  local filename="${input%.*}.$out_format"
+
+  while [[ -e "$filename" ]]; do
+    filename="${input%.*}-${RANDOM}.$out_format";
+  done
+
+  echo "$filename"
+}
+
+# -------------------------------
 # Docker Image Builder
 # -------------------------------
 ensure_image() {
@@ -65,7 +80,7 @@ ensure_image() {
 convert_image() {
   local input="$1"
   local out_format="$2"
-  local output="${input%.*}.$out_format"
+  local output=$(generate_output_filename "$input" "$out_format")
 
   ensure_image fileconv-imagemagick imagemagick.Dockerfile "$REBUILD_IMAGES"
   docker run --rm -v "$(pwd)":/data fileconv-imagemagick "$input" "$output"
@@ -78,7 +93,7 @@ convert_image() {
 convert_media() {
   local input="$1"
   local out_format="$2"
-  local output="${input%.*}.$out_format"
+  local output=$(generate_output_filename "$input" "$out_format")
 
   ensure_image fileconv-ffmpeg ffmpeg.Dockerfile "$REBUILD_IMAGES"
   docker run --rm -v "$(pwd)":/data fileconv-ffmpeg -i "$input" "$output"
@@ -90,7 +105,7 @@ convert_media() {
 # -------------------------------
 convert_document() {
   local input="$1"
-  local out_format="$2"
+  local output=$(generate_output_filename "$input" "$out_format")
 
   ensure_image fileconv-libreoffice libreoffice.Dockerfile "$REBUILD_IMAGES"
   docker run --rm -v "$(pwd)":/data fileconv-libreoffice \
@@ -104,7 +119,7 @@ convert_document() {
 convert_markup() {
   local input="$1"
   local out_format="$2"
-  local output="${input%.*}.$out_format"
+  local output=$(generate_output_filename "$input" "$out_format")
 
   ensure_image fileconv-pandoc pandoc.Dockerfile "$REBUILD_IMAGES"
   docker run --rm -v "$(pwd)":/data fileconv-pandoc "$input" -o "$output"
@@ -113,6 +128,7 @@ convert_markup() {
 
 # -------------------------------
 # Archive Conversion
+# TODO: Use generate_outupt_filename
 # -------------------------------
 convert_archive() {
   local input="$1"
