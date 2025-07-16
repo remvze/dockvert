@@ -1,4 +1,4 @@
-FROM pandoc/core:3.1
+FROM pandoc/latex:3.1
 
 WORKDIR /data
 
