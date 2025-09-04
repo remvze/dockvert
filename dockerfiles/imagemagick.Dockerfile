@@ -4,4 +4,4 @@ RUN apk add --no-cache imagemagick
 
 WORKDIR /data
 
-ENTRYPOINT ["convert"]
+ENTRYPOINT ["magick"]
